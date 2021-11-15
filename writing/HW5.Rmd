@@ -9,3 +9,10 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# List files that are saved in the data subdirectory
+```{r}
+
+list.files("../data/")
+
+```
+
