@@ -16,3 +16,17 @@ list.files("../data/")
 
 ```
 
+# Load libraries
+```{r}
+library(tidyverse)
+library(knitr)
+library(broom)
+library(tigris)
+library(sf)
+```
+
+# Load data
+```{r}
+homicides <- read_csv("homicide-data.csv", show_col_types = FALSE)
+```
+
