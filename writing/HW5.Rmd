@@ -24,16 +24,14 @@ library(sf)
 library(RColorBrewer)
 ```
 
-### Load homicide data, then pull out tracts for Minneapolis, MN, which is in Hennepin County (FIPS code 053)
+### Load data: Load in the Washington Post homicide dataset, then use the tigris package to pull geographic data (tracts) for Minnesota's Hennepin County (FIPS code 053), where Minneapolis is
 ```{r}
 homicides <- read_csv("../data/homicide-data.csv", show_col_types = FALSE)
 
 mpls_tracts <- tracts(state = "MN", county = 053, cb = TRUE)
 ```
 
-### Choice 1: Pick one city in the data. Create a map showing the locations of the homicides in that city, using the sf framework discussed in class. Use tigris to download boundaries for some sub-city geography (e.g., tracts, block groups, county subdivisions) to show as a layer underneath the points showing homicides. Use different facets for solved versus unsolved homicides and different colors to show the three race groups with the highest number of homicides for that city (you may find the fct_lump function from forcats useful for this).
-
-### Clean up data
+### Clean up data for visualization: (1) filter to just the city of Minneapolis, (2) make a column for whether or not the homicide is unsolved, (3) use fct_lump to group data by the three race groups with the highest number of homicides, and finally (4) convert data into an sf object for plotting and set the coordinate reference system (CRS)
 ```{r}
 mpls <- homicides %>%
   filter(city == "Minneapolis") %>%
@@ -42,17 +40,7 @@ mpls <- homicides %>%
   st_as_sf(coords = c("lon", "lat")) %>%
   st_set_crs(4269)
 
-st_bbox(mpls$geometry)
-
-ggplot() + 
-  xlim(c(-93.32071, -93.20544)) +
-  ylim(c(44.89853, 45.05119)) +
-  geom_sf(data = mpls_tracts, fill = "white") +
-  geom_sf(data = mpls, aes(color = victim_race)) + 
-  scale_color_brewer(palette= "Paired") +
-  facet_wrap(~unsolved) +
-  theme_classic()
-
+class(mpls)
 ```
 
 
