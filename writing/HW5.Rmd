@@ -9,10 +9,9 @@ output: "pdf_document"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ***
 
-#### List files that are saved in the data subdirectory
+List files that are saved in the data subdirectory
 
 ```{r}
 list.files("../data/")
@@ -20,7 +19,7 @@ list.files("../data/")
 
 ***
 
-#### Load libraries  
+Load libraries  
 
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
@@ -32,8 +31,6 @@ library(RColorBrewer)
 
 ***
 
-#### Load data  
-
 Load in the Washington Post homicide dataset from the data subdirectory, then use the tigris package to pull geographic data (tracts) for Minnesota's Hennepin County (FIPS code 053), where Minneapolis is
 ```{r, results = FALSE}
 homicides <- read_csv("../data/homicide-data.csv", show_col_types = FALSE)
@@ -43,7 +40,8 @@ mpls_tracts <- tracts(state = "MN", county = 053, cb = TRUE)
 
 ***
 
-#### Clean up data for visualization  
+Clean up data for visualization:  
+
 1. Filter to just the city of Minneapolis 
 2. Make a column for whether or not the homicide is unsolved
 3. Use fct_lump to preserve the three race groups with the highest number of homicides and everything else becomes "Other races." This is a bit confusing as one of the top three race categories is already "Other"
@@ -66,14 +64,13 @@ class(mpls)
 
 ***
 
-#### Finally, we can plot the data on a map  
+Now it's time to plot. First, we'll get the coordinates of the Minneapolis area that we actually have homicide data for rather than all of Hennepin County
 
-I want to get the bounds of Minneapolis that we actually have homicide data for rather than the bounds of all of Hennepin County
 ```{r}
 st_bbox(mpls$geometry) 
 ```
 
-Then I can make the plot  
+Then we can make the map
 
 ```{r}
 p <- ggplot() + 
@@ -93,7 +90,9 @@ p <- ggplot() +
 p
 ```
 
-And save it in the figures directory  
+***
+
+Finally, we'll save it in the figures directory  
 
 ```{r}
 ggsave("Minneapolis_homicides.pdf", width = 7, height = 5, path = "../figures/")
