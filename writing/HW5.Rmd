@@ -63,7 +63,7 @@ st_bbox(mpls$geometry)
 
 Then I can make the plot:
 ```{r}
-ggplot() + 
+p <- ggplot() + 
   xlim(c(-93.33, -93.21)) +
   ylim(c(44.90, 45.06)) +
   geom_sf(data = mpls_tracts, color = "lightgrey", 
@@ -74,13 +74,13 @@ ggplot() +
   labs(title = "Homicides in Minneapolis, MN in 2017", color = "Victim race") +
   theme_minimal() + 
   theme(panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank())
-```
-```{r}
-library(leaflet)
+        panel.grid.minor = element_blank(), 
+        axis.text.x = element_text(angle = 45))
 
-leaflet(mpls) %>%
-  addTiles %>%
-  addCircleMarkers
+p
+```
+
+```{r}
+ggsave("Minneapolis_homicides.pdf", path = "../figures/")
 ```
 
