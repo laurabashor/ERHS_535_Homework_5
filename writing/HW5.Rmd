@@ -31,7 +31,7 @@ homicides <- read_csv("../data/homicide-data.csv", show_col_types = FALSE)
 mpls_tracts <- tracts(state = "MN", county = 053, cb = TRUE)
 ```
 
-### Clean up data for visualization: (1) filter to just the city of Minneapolis, (2) make a column for whether or not the homicide is unsolved, (3) use fct_lump to preserve the three race groups with the highest number of homicides, and fct_relevel to order them by the  finally (4) convert data into an sf object for plotting and set the coordinate reference system (CRS)
+### Clean up data for visualization: (1) filter to just the city of Minneapolis, (2) make a column for whether or not the homicide is unsolved, (3) use fct_lump to preserve the three race groups with the highest number of homicides (4) convert data into an sf object for plotting and set the coordinate reference system (CRS)
 ```{r}
 mpls <- homicides %>%
   filter(city == "Minneapolis") %>%
@@ -42,6 +42,8 @@ mpls <- homicides %>%
 
 class(mpls)
 ```
+
+### Finally, plot the data on a map
 ```{r}
 st_bbox(mpls$geometry) #figure out the bounds of Minneapolis that we have homicide data for rather than the bounds of all of Hennepin County
 
