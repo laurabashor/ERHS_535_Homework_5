@@ -63,7 +63,7 @@ st_bbox(mpls$geometry)
 ```
 
 Then I can make the plot:
-```{r, fig.width = 7, fig.height=5}
+```{r, fig.width = 10, fig.height=5}
 ggplot() + 
   xlim(c(-93.33, -93.21)) +
   ylim(c(44.90, 45.06)) +
