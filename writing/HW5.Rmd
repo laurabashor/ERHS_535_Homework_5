@@ -25,18 +25,22 @@ library(RColorBrewer)
 ```
 
 ### Load data: Load in the Washington Post homicide dataset, then use the tigris package to pull geographic data (tracts) for Minnesota's Hennepin County (FIPS code 053), where Minneapolis is
-```{r}
+```{r, echo=FALSE}
 homicides <- read_csv("../data/homicide-data.csv", show_col_types = FALSE)
 
 mpls_tracts <- tracts(state = "MN", county = 053, cb = TRUE)
 ```
 
-### Clean up data for visualization: (1) filter to just the city of Minneapolis, (2) make a column for whether or not the homicide is unsolved, (3) use fct_lump to preserve the three race groups with the highest number of homicides (4) convert data into an sf object for plotting and set the coordinate reference system (CRS)
+### Clean up data for visualization: (1) filter to just the city of Minneapolis, (2) make a column for whether or not the homicide is unsolved, (3) use fct_lump to preserve the three race groups with the highest number of homicides and everything else becomes "Other races." This is a bit confusing as one of the top three race categories is already "Other" (4) convert data into an sf object for plotting and set the coordinate reference system (CRS)
 ```{r}
 mpls <- homicides %>%
   filter(city == "Minneapolis") %>%
-  mutate(unsolved = str_detect(disposition, "Open|without")) %>%
-  mutate(victim_race = fct_lump(victim_race, n = 3)) %>%
+  mutate(unsolved = str_detect(disposition, "Open|without"),
+         unsolved = fct_recode(as.factor(unsolved), 
+                               Unsolved= "TRUE", 
+                               Solved = "FALSE")) %>%
+  mutate(victim_race = fct_lump(victim_race, n = 3,
+                                other_level = "All other races")) %>%
   st_as_sf(coords = c("lon", "lat")) %>%
   st_set_crs(4269)
 
@@ -52,10 +56,11 @@ ggplot() +
   ylim(c(44.90, 45.06)) +
   geom_sf(data = mpls_tracts, color = "lightgrey", 
           fill = "white", alpha = 0.8) +
-  geom_sf(data = mpls, aes(color = fct_infreq(victim_race))) + #fct_infreq orders the victim race by the number of observations (homicides)
+  geom_sf(data = mpls, aes(color = fct_infreq(victim_race))) + 
   scale_color_brewer(palette= "Paired") +
   facet_wrap(~unsolved) +
-  theme_minimal() +
+  labs(title = "Homicides in Minneapolis, MN in 2017", color = "Victim race") +
+  theme_minimal() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
 ```
