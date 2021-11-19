@@ -80,7 +80,8 @@ p <- ggplot() +
 p
 ```
 
+And save it in the figures directory:
 ```{r}
-ggsave("Minneapolis_homicides.pdf", path = "../figures/")
+ggsave("Minneapolis_homicides.pdf", width = 7, height = 5, path = "../figures/")
 ```
 
