@@ -11,7 +11,6 @@
 
 <meta name="author" content="Laura Bashor" />
 
-<meta name="date" content="2021-11-11" />
 
 <title>HW5</title>
 
@@ -167,122 +166,41 @@ pre code {
 
 <h1 class="title toc-ignore">HW5</h1>
 <h4 class="author">Laura Bashor</h4>
-<h4 class="date">11/11/2021</h4>
+<h4 class="date">December 2 2021</h4>
 
 </div>
 
 
-<div id="list-files-that-are-saved-in-the-data-subdirectory" class="section level3">
-<h3>List files that are saved in the data subdirectory</h3>
+<hr />
+<div id="list-files-that-are-saved-in-the-data-subdirectory" class="section level4">
+<h4>List files that are saved in the data subdirectory:</h4>
 <pre class="r"><code>list.files(&quot;../data/&quot;)</code></pre>
 <pre><code>## [1] &quot;homicide-data.csv&quot;</code></pre>
 </div>
-<div id="load-libraries" class="section level3">
-<h3>Load libraries</h3>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-## ✓ tibble  3.1.5     ✓ dplyr   1.0.7
-## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-## ✓ readr   2.0.2     ✓ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(knitr)
+<div id="load-libraries" class="section level4">
+<h4>Load libraries:</h4>
+<pre class="r"><code>library(tidyverse)
+library(knitr)
 library(broom)
-library(tigris)</code></pre>
-<pre><code>## To enable 
-## caching of data, set `options(tigris_use_cache = TRUE)` in your R script or .Rprofile.</code></pre>
-<pre class="r"><code>library(sf)</code></pre>
-<pre><code>## Linking to GEOS 3.8.1, GDAL 3.2.1, PROJ 7.2.1</code></pre>
-<pre class="r"><code>library(RColorBrewer)</code></pre>
+library(tigris)
+library(sf)
+library(RColorBrewer)</code></pre>
 </div>
-<div id="load-data-load-in-the-washington-post-homicide-dataset-then-use-the-tigris-package-to-pull-geographic-data-tracts-for-minnesotas-hennepin-county-fips-code-053-where-minneapolis-is" class="section level3">
-<h3>Load data: Load in the Washington Post homicide dataset, then use the tigris package to pull geographic data (tracts) for Minnesota’s Hennepin County (FIPS code 053), where Minneapolis is</h3>
-<pre><code>## 
-  |                                                                            
-  |                                                                      |   0%
-  |                                                                            
-  |                                                                      |   1%
-  |                                                                            
-  |=                                                                     |   1%
-  |                                                                            
-  |=                                                                     |   2%
-  |                                                                            
-  |==                                                                    |   3%
-  |                                                                            
-  |===                                                                   |   4%
-  |                                                                            
-  |===                                                                   |   5%
-  |                                                                            
-  |====                                                                  |   5%
-  |                                                                            
-  |====                                                                  |   6%
-  |                                                                            
-  |=====                                                                 |   7%
-  |                                                                            
-  |======                                                                |   8%
-  |                                                                            
-  |======                                                                |   9%
-  |                                                                            
-  |=======                                                               |  10%
-  |                                                                            
-  |=======                                                               |  11%
-  |                                                                            
-  |========                                                              |  11%
-  |                                                                            
-  |========                                                              |  12%
-  |                                                                            
-  |=========                                                             |  13%
-  |                                                                            
-  |==========                                                            |  14%
-  |                                                                            
-  |==========                                                            |  15%
-  |                                                                            
-  |===========                                                           |  15%
-  |                                                                            
-  |===========                                                           |  16%
-  |                                                                            
-  |============                                                          |  17%
-  |                                                                            
-  |============                                                          |  18%
-  |                                                                            
-  |================                                                      |  23%
-  |                                                                            
-  |=======================                                               |  32%
-  |                                                                            
-  |==========================                                            |  38%
-  |                                                                            
-  |===========================                                           |  39%
-  |                                                                            
-  |============================                                          |  40%
-  |                                                                            
-  |=============================                                         |  42%
-  |                                                                            
-  |==================================                                    |  49%
-  |                                                                            
-  |============================================                          |  64%
-  |                                                                            
-  |==============================================                        |  65%
-  |                                                                            
-  |===============================================                       |  67%
-  |                                                                            
-  |===================================================                   |  73%
-  |                                                                            
-  |======================================================                |  78%
-  |                                                                            
-  |=========================================================             |  81%
-  |                                                                            
-  |===============================================================       |  90%
-  |                                                                            
-  |=================================================================     |  92%
-  |                                                                            
-  |====================================================================  |  97%
-  |                                                                            
-  |======================================================================| 100%</code></pre>
+<div id="load-data" class="section level4">
+<h4>Load data:</h4>
+<p>Load in the Washington Post homicide dataset from the data subdirectory, then use the tigris package to pull geographic data (tracts) for Minnesota’s Hennepin County (FIPS code 053), where Minneapolis is</p>
+<pre class="r"><code>homicides &lt;- read_csv(&quot;../data/homicide-data.csv&quot;, show_col_types = FALSE)
+
+mpls_tracts &lt;- tracts(state = &quot;MN&quot;, county = 053, cb = TRUE)</code></pre>
 </div>
-<div id="clean-up-data-for-visualization-1-filter-to-just-the-city-of-minneapolis-2-make-a-column-for-whether-or-not-the-homicide-is-unsolved-3-use-fct_lump-to-preserve-the-three-race-groups-with-the-highest-number-of-homicides-and-everything-else-becomes-other-races.-this-is-a-bit-confusing-as-one-of-the-top-three-race-categories-is-already-other-4-convert-data-into-an-sf-object-for-plotting-and-set-the-coordinate-reference-system-crs" class="section level3">
-<h3>Clean up data for visualization: (1) filter to just the city of Minneapolis, (2) make a column for whether or not the homicide is unsolved, (3) use fct_lump to preserve the three race groups with the highest number of homicides and everything else becomes “Other races.” This is a bit confusing as one of the top three race categories is already “Other” (4) convert data into an sf object for plotting and set the coordinate reference system (CRS)</h3>
+<div id="clean-up-data-for-visualization" class="section level4">
+<h4>Clean up data for visualization:</h4>
+<ol style="list-style-type: decimal">
+<li>Filter to just the city of Minneapolis</li>
+<li>Make a column for whether or not the homicide is unsolved</li>
+<li>Use fct_lump to preserve the three race groups with the highest number of homicides and everything else becomes “Other races.” This is a bit confusing as one of the top three race categories is already “Other”</li>
+<li>Convert data into an sf object for plotting and set the coordinate reference system (CRS)</li>
+</ol>
 <pre class="r"><code>mpls &lt;- homicides %&gt;%
   filter(city == &quot;Minneapolis&quot;) %&gt;%
   mutate(unsolved = str_detect(disposition, &quot;Open|without&quot;),
@@ -297,11 +215,13 @@ library(tigris)</code></pre>
 class(mpls)</code></pre>
 <pre><code>## [1] &quot;sf&quot;         &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
 </div>
-<div id="finally-plot-the-data-on-a-map" class="section level3">
-<h3>Finally, plot the data on a map</h3>
-<pre class="r"><code>st_bbox(mpls$geometry) #figure out the bounds of Minneapolis that we have homicide data for rather than the bounds of all of Hennepin County</code></pre>
+<div id="finally-we-can-plot-the-data-on-a-map" class="section level4">
+<h4>Finally, we can plot the data on a map:</h4>
+<p>I want to get the bounds of Minneapolis that we actually have homicide data for rather than the bounds of all of Hennepin County</p>
+<pre class="r"><code>st_bbox(mpls$geometry) </code></pre>
 <pre><code>##      xmin      ymin      xmax      ymax 
 ## -93.32071  44.89853 -93.20544  45.05119</code></pre>
+<p>Then I can make the plot:</p>
 <pre class="r"><code>ggplot() + 
   xlim(c(-93.33, -93.21)) +
   ylim(c(44.90, 45.06)) +

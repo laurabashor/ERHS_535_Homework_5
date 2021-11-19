@@ -1,7 +1,7 @@
 ---
 title: "HW5"
 author: "Laura Bashor"
-date: "11/11/2021"
+date: "December 2 2021"
 output: html_document
 ---
 
@@ -9,13 +9,16 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### List files that are saved in the data subdirectory
+
+***
+
+#### List files that are saved in the data subdirectory:
 ```{r}
 list.files("../data/")
 ```
 
-### Load libraries
-```{r}
+#### Load libraries:
+```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
 library(knitr)
 library(broom)
@@ -24,14 +27,19 @@ library(sf)
 library(RColorBrewer)
 ```
 
-### Load data: Load in the Washington Post homicide dataset, then use the tigris package to pull geographic data (tracts) for Minnesota's Hennepin County (FIPS code 053), where Minneapolis is
-```{r, echo=FALSE}
+#### Load data: 
+Load in the Washington Post homicide dataset from the data subdirectory, then use the tigris package to pull geographic data (tracts) for Minnesota's Hennepin County (FIPS code 053), where Minneapolis is
+```{r, results = FALSE}
 homicides <- read_csv("../data/homicide-data.csv", show_col_types = FALSE)
 
 mpls_tracts <- tracts(state = "MN", county = 053, cb = TRUE)
 ```
 
-### Clean up data for visualization: (1) filter to just the city of Minneapolis, (2) make a column for whether or not the homicide is unsolved, (3) use fct_lump to preserve the three race groups with the highest number of homicides and everything else becomes "Other races." This is a bit confusing as one of the top three race categories is already "Other" (4) convert data into an sf object for plotting and set the coordinate reference system (CRS)
+#### Clean up data for visualization: 
+1. Filter to just the city of Minneapolis 
+2. Make a column for whether or not the homicide is unsolved
+3. Use fct_lump to preserve the three race groups with the highest number of homicides and everything else becomes "Other races." This is a bit confusing as one of the top three race categories is already "Other"
+4. Convert data into an sf object for plotting and set the coordinate reference system (CRS)
 ```{r}
 mpls <- homicides %>%
   filter(city == "Minneapolis") %>%
@@ -47,10 +55,15 @@ mpls <- homicides %>%
 class(mpls)
 ```
 
-### Finally, plot the data on a map
-```{r}
-st_bbox(mpls$geometry) #figure out the bounds of Minneapolis that we have homicide data for rather than the bounds of all of Hennepin County
+#### Finally, we can plot the data on a map:
 
+I want to get the bounds of Minneapolis that we actually have homicide data for rather than the bounds of all of Hennepin County
+```{r}
+st_bbox(mpls$geometry) 
+```
+
+Then I can make the plot:
+```{r, fig.width = 7, fig.height=5}
 ggplot() + 
   xlim(c(-93.33, -93.21)) +
   ylim(c(44.90, 45.06)) +
@@ -64,5 +77,4 @@ ggplot() +
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
 ```
-
 
