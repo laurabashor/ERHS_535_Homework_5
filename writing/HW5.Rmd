@@ -31,16 +31,31 @@ homicides <- read_csv("../data/homicide-data.csv", show_col_types = FALSE)
 mpls_tracts <- tracts(state = "MN", county = 053, cb = TRUE)
 ```
 
-### Clean up data for visualization: (1) filter to just the city of Minneapolis, (2) make a column for whether or not the homicide is unsolved, (3) use fct_lump to group data by the three race groups with the highest number of homicides, and finally (4) convert data into an sf object for plotting and set the coordinate reference system (CRS)
+### Clean up data for visualization: (1) filter to just the city of Minneapolis, (2) make a column for whether or not the homicide is unsolved, (3) use fct_lump to preserve the three race groups with the highest number of homicides, and fct_relevel to order them by the  finally (4) convert data into an sf object for plotting and set the coordinate reference system (CRS)
 ```{r}
 mpls <- homicides %>%
   filter(city == "Minneapolis") %>%
   mutate(unsolved = str_detect(disposition, "Open|without")) %>%
-  mutate(victim_race = fct_lump_n(victim_race, 4)) %>%
+  mutate(victim_race = fct_lump(victim_race, n = 3)) %>%
   st_as_sf(coords = c("lon", "lat")) %>%
   st_set_crs(4269)
 
 class(mpls)
+```
+```{r}
+st_bbox(mpls$geometry) #figure out the bounds of Minneapolis that we have homicide data for rather than the bounds of all of Hennepin County
+
+ggplot() + 
+  xlim(c(-93.33, -93.21)) +
+  ylim(c(44.90, 45.06)) +
+  geom_sf(data = mpls_tracts, color = "lightgrey", 
+          fill = "white", alpha = 0.8) +
+  geom_sf(data = mpls, aes(color = fct_infreq(victim_race))) + #fct_infreq orders the victim race by the number of observations (homicides)
+  scale_color_brewer(palette= "Paired") +
+  facet_wrap(~unsolved) +
+  theme_minimal() +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
 ```
 
 
