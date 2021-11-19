@@ -21,7 +21,6 @@ list.files("../data/")
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
 library(knitr)
-library(broom)
 library(tigris)
 library(sf)
 library(RColorBrewer)
@@ -63,7 +62,7 @@ st_bbox(mpls$geometry)
 ```
 
 Then I can make the plot:
-```{r, fig.width = 10, fig.height=5}
+```{r}
 ggplot() + 
   xlim(c(-93.33, -93.21)) +
   ylim(c(44.90, 45.06)) +
@@ -76,5 +75,12 @@ ggplot() +
   theme_minimal() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
+```
+```{r}
+library(leaflet)
+
+leaflet(mpls) %>%
+  addTiles %>%
+  addCircleMarkers
 ```
 
