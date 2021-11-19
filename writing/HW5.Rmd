@@ -1,7 +1,7 @@
 ---
 title: "HW5"
 author: "Laura Bashor"
-date: "December 2 2021"
+date: "December 1, 2021"
 output: html_document
 ---
 
@@ -71,7 +71,7 @@ p <- ggplot() +
   geom_sf(data = mpls, aes(color = fct_infreq(victim_race))) + 
   scale_color_brewer(palette= "Paired") +
   facet_wrap(~unsolved) +
-  labs(title = "Homicides in Minneapolis, MN in 2017", color = "Victim race") +
+  labs(title = "Homicides in Minneapolis, MN 2007-17", color = "Victim race") +
   theme_minimal() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(), 
